@@ -6,6 +6,7 @@ pipeline {
              sh '''#!/bin/bash -xe
              export TF_BRANCH=r1.7
              cd /
+             echo 'jenkins' | sudo -S rm -rf tensorflow
              echo 'jenkins' | sudo -S git clone --branch=${TF_BRANCH} --depth=1 https://github.com/tensorflow/tensorflow.git
              cd tensorflow
              echo 'jenkins' |sudo -S git checkout ${TF_BRANCH}
