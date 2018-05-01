@@ -6,10 +6,10 @@ pipeline {
              sh '''#!/bin/bash -xe
              TF_BRANCH=r1.7
              cd /
-             sudo -S git clone --branch=${TF_BRANCH} --depth=1 https://github.com/tensorflow/tensorflow.git
+             echo 'jenkins' | sudo -S git clone --branch=${TF_BRANCH} --depth=1 https://github.com/tensorflow/tensorflow.git
              cd tensorflow
-             sudo -S git checkout ${TF_BRANCH}
-             sudo -S updatedb
+             echo 'jenkins' |sudo -S git checkout ${TF_BRANCH}
+             echo 'jenkins' |sudo -S updatedb
                 '''
             }
     }
@@ -29,21 +29,21 @@ pipeline {
             steps {
              sh '''#!/bin/bash -xe
              export WHL_DIR=/whl
-             sudo -S bazel build --config="opt" \
+             echo 'jenkins' | sudo -S bazel build --config="opt" \
                               --config=mkl \
                               --copt="-DEIGEN_USE_VML" \
                               --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" \
                               //tensorflow/tools/pip_package:build_pip_package
-             sudo -S mkdir ${WHL_DIR}
-             sudo -S bazel-bin/tensorflow/tools/pip_package/build_pip_package ${WHL_DIR}
+             echo 'jenkins' | sudo -S mkdir ${WHL_DIR}
+             echo 'jenkins' | sudo -S bazel-bin/tensorflow/tools/pip_package/build_pip_package ${WHL_DIR}
                 '''
             }
     }
          stage('Install Tensorflow Package') {
             steps {
                   sh '''#!/bin/bash -xe
-                  sudo -S pip --no-cache-dir install --upgrade ${WHL_DIR}/tensorflow-*.whl
-                  sudo -S rm -rf /root/.cache
+                  echo 'jenkins' | sudo -S pip --no-cache-dir install --upgrade ${WHL_DIR}/tensorflow-*.whl
+                  echo 'jenkins' | sudo -S rm -rf /root/.cache
                      '''
             }
      }
@@ -65,8 +65,8 @@ pipeline {
                    export TFLOW=$(cd ${WHL_DIR} && find -type f -name "tensorflow*.whl" | cut -c 3-)
                    pv ${WHL_DIR}/${TFLOW} > /media/common/IT/${TFLOW}
                    cd ${WHL_DIR}
-                   sudo -S md5sum /media/common/IT/${TFLOW} > ${TFLOW}.md5
-                   sudo -S md5sum -c ${TFLOW}.md5 
+                   md5sum /media/common/IT/${TFLOW} > ${TFLOW}.md5
+                   md5sum -c ${TFLOW}.md5 
                        if [ "$?" != "0" ]; then
                           echo "SHA1 changed! Security breach? Job Will Be Marked As Failed!!!"
                           exit -1
