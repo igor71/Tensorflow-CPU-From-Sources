@@ -4,7 +4,7 @@ pipeline {
          stage('Clone Tensorflow Repository') {
             steps {
              sh '''#!/bin/bash -xe
-             TF_BRANCH=r1.7
+             export TF_BRANCH=r1.7
              cd /
              echo 'jenkins' | sudo -S git clone --branch=${TF_BRANCH} --depth=1 https://github.com/tensorflow/tensorflow.git
              cd tensorflow
@@ -16,7 +16,7 @@ pipeline {
          stage('Configure Build & Bazel ENV') {
             steps {
              sh '''#!/bin/bash -xe
-             export WHL_DIR=/whl
+             cd tensorflow
              export CI_BUILD_PYTHON=python PYTHON_BIN_PATH=/usr/bin/python PYTHON_LIB_PATH=/usr/local/lib/python2.7/dist-packages
              export CC_OPT_FLAGS='-march=native' TF_NEED_JEMALLOC=0 TF_NEED_GCP=0 TF_NEED_CUDA=0 TF_NEED_CUDA=0 TF_NEED_HDFS=0
              export TF_NEED_S3=0 TF_NEED_OPENCL=0 TF_NEED_GDR=0 TF_ENABLE_XLA=0 TF_NEED_VERBS=0 TF_NEED_MPI=0
