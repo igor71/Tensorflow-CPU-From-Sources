@@ -6,10 +6,10 @@ pipeline {
              sh '''#!/bin/bash -xe
              TF_BRANCH=r1.7
              cd /
-             sudo git clone --branch=${TF_BRANCH} --depth=1 https://github.com/tensorflow/tensorflow.git
+             git clone --branch=${TF_BRANCH} --depth=1 https://github.com/tensorflow/tensorflow.git
              cd tensorflow
-             sudo git checkout ${TF_BRANCH}
-             sudo updatedb
+             git checkout ${TF_BRANCH}
+             updatedb
                 '''
             }
     }
