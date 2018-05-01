@@ -44,6 +44,7 @@ pipeline {
                   sh '''#!/bin/bash -xe
                   sudo pip --no-cache-dir install --upgrade ${WHL_DIR}/tensorflow-*.whl
                   sudo rm -rf /root/.cache
+                     '''
             }
      }
          stage('Testing Tensorflow Installation') {
