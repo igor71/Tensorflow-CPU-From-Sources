@@ -20,7 +20,7 @@ pipeline {
                    cd /
                    echo 'jenkins' | sudo -S cp build_tf_package.sh /tensorflow
                    cd tensorflow
-                   echo 'jenkins' | sudo -S bash cp build_tf_package.sh /tensorflow 
+                   echo 'jenkins' | sudo -S bash build_tf_package.sh 
                 '''
             }
     }
