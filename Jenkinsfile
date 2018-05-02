@@ -1,5 +1,5 @@
 pipeline {
-   agent {label 'yi-tensorflow'}
+   agent {label 'Tensorflow-Project'}
       stages {
          stage('Clone Tensorflow Repository') {
             steps {
