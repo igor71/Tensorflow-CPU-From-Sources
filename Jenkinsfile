@@ -5,6 +5,7 @@ pipeline {
             steps {
              sh '''#!/bin/bash -xe
              export TF_BRANCH=r1.7
+             export WHL_DIR=/whl
              cd /
              echo 'jenkins' | sudo -S rm -rf tensorflow
              echo 'jenkins' | sudo -S git clone --branch=${TF_BRANCH} --depth=1 https://github.com/tensorflow/tensorflow.git
@@ -37,7 +38,7 @@ pipeline {
             steps {
              sh '''#!/bin/bash -xe
                    cd /
-                   python cpu_tf_check.py && python unitest.py 
+                   echo 'jenkins' | sudo -S python cpu_tf_check.py && python unitest.py 
                        if [ "$?" != "0" ]; then
                           echo "Tensorflow build Failed!!!"
                           exit -1
@@ -51,8 +52,8 @@ pipeline {
                    export TFLOW=$(cd ${WHL_DIR} && find -type f -name "tensorflow*.whl" | cut -c 3-)
                    pv ${WHL_DIR}/${TFLOW} > /media/common/IT/${TFLOW}
                    cd ${WHL_DIR}
-                   md5sum /media/common/IT/${TFLOW} > ${TFLOW}.md5
-                   md5sum -c ${TFLOW}.md5 
+                   echo 'jenkins' | sudo -S md5sum /media/common/IT/${TFLOW} > ${TFLOW}.md5
+                   echo 'jenkins' | sudo -S md5sum -c ${TFLOW}.md5 
                        if [ "$?" != "0" ]; then
                           echo "SHA1 changed! Security breach? Job Will Be Marked As Failed!!!"
                           exit -1
