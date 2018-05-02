@@ -16,7 +16,7 @@ pipeline {
     }
          stage('Configure Build ENV & Build TensorFlow Package From Sources') {
             steps {
-             sh '''#!/bin/bash -xe
+             sh '''
              export WHL_DIR=/whl
              cd /tensorflow
              export CI_BUILD_PYTHON=python PYTHON_BIN_PATH=/usr/bin/python PYTHON_LIB_PATH=/usr/local/lib/python2.7/dist-packages
