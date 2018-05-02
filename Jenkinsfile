@@ -22,8 +22,8 @@ pipeline {
                    export CC_OPT_FLAGS='-march=native' TF_NEED_JEMALLOC=0 TF_NEED_GCP=0 TF_NEED_CUDA=0 TF_NEED_CUDA=0 TF_NEED_HDFS=0
                    export TF_NEED_S3=0 TF_NEED_OPENCL=0 TF_NEED_GDR=0 TF_ENABLE_XLA=0 TF_NEED_VERBS=0 TF_NEED_MPI=0
                    export TF_NEED_KAFKA=0 TF_NEED_OPENCL_SYCL=0 
-                   yes N |./configure
                    cd tensorflow
+                   yes N |./configure
                    echo 'jenkins' |sudo -S bazel build --config="opt" \
                                                        --config=mkl \
                                                        --copt="-DEIGEN_USE_VML" \
