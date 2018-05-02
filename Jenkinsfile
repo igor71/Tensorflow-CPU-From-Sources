@@ -18,19 +18,9 @@ pipeline {
             steps {
              sh '''#!/bin/bash -xe
                    cd /
-                   export CI_BUILD_PYTHON=python PYTHON_BIN_PATH=/usr/bin/python PYTHON_LIB_PATH=/usr/local/lib/python2.7/dist-packages
-                   export CC_OPT_FLAGS='-march=native' TF_NEED_JEMALLOC=0 TF_NEED_GCP=0 TF_NEED_CUDA=0 TF_NEED_CUDA=0 TF_NEED_HDFS=0
-                   export TF_NEED_S3=0 TF_NEED_OPENCL=0 TF_NEED_GDR=0 TF_ENABLE_XLA=0 TF_NEED_VERBS=0 TF_NEED_MPI=0
-                   export TF_NEED_KAFKA=0 TF_NEED_OPENCL_SYCL=0 
+                   echo 'jenkins' | sudo -S cp build_tf_package.sh /tensorflow
                    cd tensorflow
-                   echo 'jenkins' |sudo -S yes N |./configure
-                   echo 'jenkins' |sudo -S bazel build --config="opt" \
-                                                       --config=mkl \
-                                                       --copt="-DEIGEN_USE_VML" \
-                                                       --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" \
-                                                       //tensorflow/tools/pip_package:build_pip_package
-                   echo 'jenkins' |sudo -S bazel-bin/tensorflow/tools/pip_package/build_pip_package $WORKSPACE
-                   echo "All Done!!! Look for tensorflow.whl package at $WORKSPACE"
+                   echo 'jenkins' | sudo -S bash cp build_tf_package.sh /tensorflow 
                 '''
             }
     }
