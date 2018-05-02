@@ -5,7 +5,6 @@ pipeline {
             steps {
              sh '''#!/bin/bash -xe
              export TF_BRANCH=r1.7
-             export WHL_DIR=/whl
              cd /
              echo 'jenkins' | sudo -S rm -rf tensorflow
              echo 'jenkins' | sudo -S git clone --branch=${TF_BRANCH} --depth=1 https://github.com/tensorflow/tensorflow.git
@@ -29,6 +28,7 @@ pipeline {
          stage('Install Tensorflow Package') {
             steps {
                   sh '''#!/bin/bash -xe
+                  export WHL_DIR=/whl
                   echo 'jenkins' | sudo -S pip --no-cache-dir install --upgrade ${WHL_DIR}/tensorflow-*.whl
                   echo 'jenkins' | sudo -S rm -rf /root/.cache
                      '''
@@ -49,6 +49,7 @@ pipeline {
          stage('Push Arifact To Network Share') {
             steps {
              sh '''#!/bin/bash -xe
+                   export WHL_DIR=/whl
                    export TFLOW=$(cd ${WHL_DIR} && find -type f -name "tensorflow*.whl" | cut -c 3-)
                    pv ${WHL_DIR}/${TFLOW} > /media/common/IT/${TFLOW}
                    cd ${WHL_DIR}
@@ -63,7 +64,10 @@ pipeline {
     }
          stage('Remove Build Folder') {
             steps {
-             sh 'sudo -S rm -rf ${WHL_DIR}'
+             sh '''#!/bin/bash -xe
+                   export WHL_DIR=/whl
+                   echo 'jenkins' | sudo -S rm -rf ${WHL_DIR}
+                 ''' 
             }
      }
 }      
