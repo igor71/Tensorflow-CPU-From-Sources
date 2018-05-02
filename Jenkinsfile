@@ -17,19 +17,27 @@ pipeline {
          stage('Configure Build ENV & Build TensorFlow Package From Sources') {
             steps {
              sh '''#!/bin/bash -xe
-                   cd /          
-                   pwd
-                   echo 'jenkins' | sudo -S cp build_tf_package.sh /tensorflow
+                   cd /
+                   export CI_BUILD_PYTHON=python PYTHON_BIN_PATH=/usr/bin/python PYTHON_LIB_PATH=/usr/local/lib/python2.7/dist-packages
+                   export CC_OPT_FLAGS='-march=native' TF_NEED_JEMALLOC=0 TF_NEED_GCP=0 TF_NEED_CUDA=0 TF_NEED_CUDA=0 TF_NEED_HDFS=0
+                   export TF_NEED_S3=0 TF_NEED_OPENCL=0 TF_NEED_GDR=0 TF_ENABLE_XLA=0 TF_NEED_VERBS=0 TF_NEED_MPI=0
+                   export TF_NEED_KAFKA=0 TF_NEED_OPENCL_SYCL=0 
+                   yes N |./configure
                    cd tensorflow
-                   echo 'jenkins' | sudo -S bash build_tf_package.sh
+                   echo 'jenkins' |sudo -S bazel build --config="opt" \
+                                                       --config=mkl \
+                                                       --copt="-DEIGEN_USE_VML" \
+                                                       --cxxopt="-D_GLIBCXX_USE_CXX11_ABI=0" \
+                                                       //tensorflow/tools/pip_package:build_pip_package
+                   echo 'jenkins' |sudo -S bazel-bin/tensorflow/tools/pip_package/build_pip_package $WORKSPACE
+                   echo "All Done!!! Look for tensorflow.whl package at $WORKSPACE"
                 '''
             }
     }
          stage('Install Tensorflow Package') {
             steps {
                   sh '''#!/bin/bash -xe
-                  export WHL_DIR=/whl
-                  echo 'jenkins' | sudo -S pip --no-cache-dir install --upgrade ${WHL_DIR}/tensorflow-*.whl
+                  echo 'jenkins' | sudo -S pip --no-cache-dir install --upgrade $WORKSPACE/tensorflow-*.whl
                   echo 'jenkins' | sudo -S rm -rf /root/.cache
                      '''
             }
@@ -49,12 +57,11 @@ pipeline {
          stage('Push Arifact To Network Share') {
             steps {
              sh '''#!/bin/bash -xe
-                   export WHL_DIR=/whl
-                   export TFLOW=$(cd ${WHL_DIR} && find -type f -name "tensorflow*.whl" | cut -c 3-)
-                   pv ${WHL_DIR}/${TFLOW} > /media/common/IT/${TFLOW}
-                   cd ${WHL_DIR}
-                   echo 'jenkins' | sudo -S md5sum /media/common/IT/${TFLOW} > ${TFLOW}.md5
-                   echo 'jenkins' | sudo -S md5sum -c ${TFLOW}.md5 
+                   export TFLOW=$(cd $WORKSPACE && find -type f -name "tensorflow*.whl" | cut -c 3-)
+                   pv $WORKSPACE/${TFLOW} > /media/common/IT/${TFLOW}
+                   cd $WORKSPACE
+                   md5sum /media/common/IT/${TFLOW} > ${TFLOW}.md5
+                   md5sum -c ${TFLOW}.md5 
                        if [ "$?" != "0" ]; then
                           echo "SHA1 changed! Security breach? Job Will Be Marked As Failed!!!"
                           exit -1
@@ -62,11 +69,11 @@ pipeline {
                  ''' 
             }
     }
-         stage('Remove Build Folder') {
+         stage('Clean Build Folder') {
             steps {
              sh '''#!/bin/bash -xe
-                   export WHL_DIR=/whl
-                   echo 'jenkins' | sudo -S rm -rf ${WHL_DIR}
+                   cd $WORKSPACE
+                   rm -rf tensorflow-*
                  ''' 
             }
      }
