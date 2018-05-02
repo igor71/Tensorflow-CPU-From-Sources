@@ -19,9 +19,9 @@ pipeline {
              sh '''#!/bin/bash -xe
                    cd /          
                    pwd
-                   cp build_tf_package.sh /tensorflow
+                   echo 'jenkins' | sudo -S cp build_tf_package.sh /tensorflow
                    cd tensorflow
-                   bash build_tf_package.sh
+                   echo 'jenkins' | sudo -S bash build_tf_package.sh
                 '''
             }
     }
