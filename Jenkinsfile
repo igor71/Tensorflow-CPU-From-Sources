@@ -17,7 +17,10 @@ pipeline {
          stage('Configure Build ENV & Build TensorFlow Package From Sources') {
             steps {
              sh '''#!/bin/bash -xe
-                   cp /build_tf_package.sh /tensorflow
+                   cd /          
+                   pwd
+                   cp build_tf_package.sh /tensorflow
+                   cd tensorflow
                    bash build_tf_package.sh
                 '''
             }
