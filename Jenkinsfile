@@ -6,7 +6,6 @@ pipeline {
              sh '''#!/bin/bash -xe
              export TF_BRANCH=r1.7
              cd /
-             echo 'jenkins' | sudo -S rm -rf tensorflow
              echo 'jenkins' | sudo -S git clone --branch=${TF_BRANCH} --depth=1 https://github.com/tensorflow/tensorflow.git
              cd tensorflow
              echo 'jenkins' |sudo -S git checkout ${TF_BRANCH}
@@ -18,9 +17,9 @@ pipeline {
             steps {
              sh '''#!/bin/bash -xe
                    cd /
-                   echo 'jenkins' | sudo -S cp test.sh /tensorflow
+                   echo 'jenkins' | sudo -S cp build_tf_package.sh /tensorflow
                    cd tensorflow
-                   echo 'jenkins' | sudo -S bash test.sh 
+                   echo 'jenkins' | sudo -S bash build_tf_package.sh 
                 '''
             }
     }
@@ -60,11 +59,13 @@ pipeline {
                  ''' 
             }
     }
-         stage('Clean Build Folder') {
+         stage('Cleanup Build Folders') {
             steps {
              sh '''#!/bin/bash -xe
                    cd $WORKSPACE
                    rm -rf tensorflow-*
+                   rm -rf /whl
+                   rm -f /home/jenkins/tensorflow-*
                  ''' 
             }
      }
