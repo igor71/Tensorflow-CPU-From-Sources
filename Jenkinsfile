@@ -27,7 +27,7 @@ pipeline {
          stage('Install Tensorflow Package') {
             steps {
                   sh '''#!/bin/bash -xe
-                  mv /jenkins/home/tensorflow-*.whl $WORKSPACE
+                  mv /home/jenkins/tensorflow-*.whl $WORKSPACE
                   echo 'jenkins' | sudo -S pip --no-cache-dir install --upgrade $WORKSPACE/tensorflow-*.whl
                   echo 'jenkins' | sudo -S rm -rf /root/.cache
                      '''
