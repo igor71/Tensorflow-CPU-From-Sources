@@ -64,8 +64,8 @@ pipeline {
              sh '''#!/bin/bash -xe
                    cd $WORKSPACE
                    rm -rf tensorflow-*
-                   rm -rf /whl
                    rm -f /home/jenkins/tensorflow-*
+                   echo 'jenkins' | sudo -S rm -rf /whl 
                  ''' 
             }
      }
