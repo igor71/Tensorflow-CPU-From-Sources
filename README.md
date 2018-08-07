@@ -13,9 +13,9 @@ Automativ Build Configured In Pipeline Build-Tensorflow-Package Jenkins Job
   
  docker run -it --name tflow_build -v /media:/media yi/tflow:0.0 /bin/bash 
  
- git clone --branch=master --depth=1 https://github.com/igor71/Tensorflow-GPU-From-Sources
+ git clone --branch=master --depth=1 https://github.com/igor71/Tensorflow-From-Sources
  
- cd Tensorflow-GPU-From-Sources
+ cd Tensorflow-From-Sources
  
  /bin/bash tflow-build.sh
  
