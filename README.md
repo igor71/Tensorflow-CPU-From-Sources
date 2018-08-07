@@ -10,6 +10,12 @@ Automatic Build Configured In Pipeline Build-Tensorflow-Package Jenkins Job
  docker images  -->> note image ID
  
  docker tag <Image ID> yi/tflow:0.0
+ 
+ Connect using ssh:
+ 
+ docker run -d -p 37001:22 --name tflow_build -v /media:/media yi/tflow:0.0 
+ 
+ Run the docker interactivelly:
   
  docker run -it --name tflow_build -v /media:/media yi/tflow:0.0 /bin/bash 
  
