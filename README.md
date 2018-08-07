@@ -23,11 +23,11 @@ Automativ Build Configured In Pipeline Build-Tensorflow-Package Jenkins Job
  
  TFLOW=$(ls | sort -V | tail -n 1)
  
- pv /whl/$TFLOW > /media/common/DOCKER_IMAGES/Tensorflow/Current/$TFLOW
+ pv /whl/$TFLOW > /media/common/DOCKER_IMAGES/Tensorflow/CPU/$TFLOW
  
  pip --no-cache-dir install --upgrade $TFLOW
  
  cd /
  
- ipython gpu_tf_check.py
+ ipython cpu_tf_check.py
  ```
