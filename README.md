@@ -19,11 +19,11 @@ Automatic Build Configured In Pipeline Build-Tensorflow-Package Jenkins Job
  
  /bin/bash tflow-build.sh
  
- cd /whl
+ cd /home/jenkins
  
  TFLOW=$(ls | sort -V | tail -n 1)
  
- pv /whl/$TFLOW > /media/common/DOCKER_IMAGES/Tensorflow/CPU/$TFLOW
+ pv /home/jenkins/$TFLOW > /media/common/DOCKER_IMAGES/Tensorflow/CPU/$TFLOW
  
  pip --no-cache-dir install --upgrade $TFLOW
  
