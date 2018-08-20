@@ -4,7 +4,7 @@ pipeline {
          stage('Clone Tensorflow Repository') {
             steps {
              sh '''#!/bin/bash -xe
-             export TF_BRANCH=r1.8
+             export TF_BRANCH=$tf_branch
              cd /
              echo 'jenkins' | sudo -S git clone --branch=${TF_BRANCH} --depth=1 https://github.com/tensorflow/tensorflow.git
              cd tensorflow
@@ -50,7 +50,7 @@ pipeline {
                    export TFLOW=$(cd $WORKSPACE && find -type f -name "tensorflow*.whl" | cut -c 3-)
                    pv $WORKSPACE/${TFLOW} > /media/common/IT/${TFLOW}
                    cd $WORKSPACE
-                   md5sum /media/common/IT/${TFLOW} > ${TFLOW}.md5
+                   md5sum /media/common/DOCKER_IMAGES/Tensorflow/CPU/${TFLOW} > ${TFLOW}.md5
                    md5sum -c ${TFLOW}.md5 
                        if [ "$?" != "0" ]; then
                           echo "SHA1 changed! Security breach? Job Will Be Marked As Failed!!!"
