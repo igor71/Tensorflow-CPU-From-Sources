@@ -48,7 +48,7 @@ pipeline {
             steps {
              sh '''#!/bin/bash -xe
                    export TFLOW=$(cd $WORKSPACE && find -type f -name "tensorflow*.whl" | cut -c 3-)
-                   pv $WORKSPACE/${TFLOW} > /media/common/IT/${TFLOW}
+                   pv $WORKSPACE/${TFLOW} > /media/common/DOCKER_IMAGES/Tensorflow/CPU/${TFLOW}
                    cd $WORKSPACE
                    md5sum /media/common/DOCKER_IMAGES/Tensorflow/CPU/${TFLOW} > ${TFLOW}.md5
                    md5sum -c ${TFLOW}.md5 
